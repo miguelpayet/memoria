@@ -1,0 +1,58 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.Tarjetas {
+  border: 1px solid black;
+}
+
+.inicio {
+    display: inline-block;
+    overflow:auto;
+    border: 1px solid #fff;
+    margin: 5px;
+}
+
+.medio {
+  display:inline-block;
+  overflow:auto;
+  border: 1px solid #fff;  
+  margin: 5px;
+
+}
+
+.fin {
+  display:inline-block;
+  overflow:auto;
+  border: 1px solid #fff;  
+  margin: 5px;  
+}
+
+.linea {
+  clear:both;
+}
+
+.click {
+  border: 1px dotted #999;
+}
