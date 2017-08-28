@@ -1,4 +1,5 @@
-const Estado = {INICIAL: 1, CLICK: 2, ABIERTO: 3, SOLUCIONADO: 4};
+import {Estado, EstadoTarjetas} from './EstadoTarjetas';
+
 class Tarjeta {
     constructor(id, cubierta, imagen, numero) {
         this.id = "tarjeta-" + id;
@@ -10,7 +11,7 @@ class Tarjeta {
         this.onClick = this.onClick.bind(this);
     }
     get archivo() {
-        if (this.estado === Estado.ABIERTO) {
+        if (this.estado === Estado.ABIERTO || this.estado === Estado.SOLUCIONADO) {
             return this.imagen;
         } else {
             return this.cubierta;
@@ -43,20 +44,8 @@ class Tarjeta {
     get final() {
         return (this.posicion % 4 === 3);
     }
-    onClick() {
-        switch (this.estado) {
-            case Estado.INICIAL:
-                this.estado = Estado.CLICK;
-                break;
-            case Estado.CLICK:
-                break;
-            case Estado.ABIERTO:
-                break;
-            case Estado.SOLUCIONADO:
-                break;
-            default:
-                break;
-        }
+    onClick(app) {
+        EstadoTarjetas.abrirTarjeta(this, app);
     }
     static crearTarjetas() {
         const LIMITE = 15;
