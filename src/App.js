@@ -6,22 +6,23 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.clickear = true;
-    this.state = {list: Tarjeta.crearTarjetas()};
-    this.onClick = this.onClick.bind(this);    
+    this.state = {list: Tarjeta.crearTarjetas(), timerInicial: Date.now(), timerActual: Date.now(), clicks: 0, interval:undefined};
+    this.onClick = this.onClick.bind(this);
   }
   onClick(item) {
-    console.log("onClick " + item.id);
     if (this.clickear) {
+      if (this.state.interval === undefined) {
+        const apli = this; 
+        this.setState({timerInicial: Date.now(), interval: setInterval(function() {apli.setState({timerActual: Date.now()})}, 1000)});
+      }
       item.onClick(this);
-      var _list = this.state.list
-      this.setState({list: _list});
+      this.setState({list: this.state.list});
     }
   }
   render() {
     const nombre = "juego de memoria";
-    console.log(this);
     return (
-      <div id="principal" class="principal">
+      <div id="principal" className="principal">
         <div className="App">
             <h1>{nombre}</h1>
         </div>
@@ -35,6 +36,11 @@ class App extends Component {
             {item.final && <div className="linea"></div>}
           </span>)
         }
+        </div>
+        <div key="contador" className="Contador">
+          <span key="contador-hora">{Math.floor((this.state.timerActual - this.state.timerInicial) / 1000)}</span>
+          &nbsp;-&nbsp;
+          <span key="contador-clicks">{this.state.clicks}</span>
         </div>
       </div>
     )

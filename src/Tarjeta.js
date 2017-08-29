@@ -1,9 +1,8 @@
 import {Estado, EstadoTarjetas} from './EstadoTarjetas';
 
 class Tarjeta {
-    constructor(id, cubierta, imagen, numero) {
+    constructor(id, imagen, numero) {
         this.id = "tarjeta-" + id;
-        this.cubierta = cubierta;
         this.imagen = imagen;
         this.numero = numero;
         this.posicion = undefined;
@@ -14,12 +13,12 @@ class Tarjeta {
         if (this.estado === Estado.ABIERTO || this.estado === Estado.SOLUCIONADO) {
             return this.imagen;
         } else {
-            return this.cubierta;
+            return Tarjeta.BASE;
         }
     }
     get clase() {
         let clase = "";
-        switch (this.posicion % 4) {
+        switch (this.posicion % Tarjeta.COLUMNA) {
             case 0:
                 clase = "inicio";
                 break;
@@ -46,13 +45,12 @@ class Tarjeta {
     }
     onClick(app) {
         EstadoTarjetas.abrirTarjeta(this, app);
+        app.setState({clicks: app.state.clicks + 1});
     }
     static crearTarjetas() {
-        const LIMITE = 15;
-        const base = "cubierta.jpg";
-        const tarjetas = new Array(LIMITE);
-         for(let i = 0; i <= LIMITE; i++) {
-             tarjetas[i] = new Tarjeta(i, base, "imagen-" + (Math.floor(i / 2) + 1) + ".jpg", Math.random());
+        const tarjetas = new Array(Tarjeta.LIMITE);
+         for(let i = 0; i <= Tarjeta.LIMITE; i++) {
+             tarjetas[i] = new Tarjeta(i, "imagen-" + (Math.floor(i / 2) + 1) + ".jpg", Math.random());
          }
          tarjetas.sort((x,y) => (x.numero - y.numero));
          let pos = 0;
@@ -60,6 +58,10 @@ class Tarjeta {
          return tarjetas;
     }
 }
+Tarjeta.LIMITE = 15;
+Tarjeta.COLUMNA = Math.floor(Math.sqrt(Tarjeta.LIMITE + 1));
+Tarjeta.FILA = Math.floor((Tarjeta.LIMITE + 1) / Tarjeta.COLUMNA);
+Tarjeta.BASE = "cubierta.jpg";
 
 export default Tarjeta;
 export {Tarjeta};

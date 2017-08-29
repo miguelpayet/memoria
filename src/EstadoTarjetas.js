@@ -1,38 +1,40 @@
-const Estado = {INICIAL: 1, CLICK: 2, ABIERTO: 3, SOLUCIONADO: 4};
-
-let tarjetas = [];
+const Estado = {INICIAL: 1, ABIERTO: 2, SOLUCIONADO: 3};
 
 class EstadoTarjetas {
     static abrirTarjeta(item, app) {
-        console.log("abrirTarjeta " + item.id);
-        if (tarjetas.length === 2) {
+        if (EstadoTarjetas.tarjetas.length === 2) {
             alert("¡error!");
         }
-        const pos = tarjetas.findIndex((i) => item.id === i.id)
+        const pos = EstadoTarjetas.tarjetas.findIndex((i) => item.id === i.id)
         if (item.estado === Estado.INICIAL) {
             if (pos === -1) {
                 item.estado = Estado.ABIERTO; //CLICK;
-                tarjetas.push(item);
+                EstadoTarjetas.tarjetas.push(item);
             }
         } else if (item.estado === Estado.ABIERTO) { //CLICK) {
              if ((pos !== -1)) {
-                tarjetas.splice(pos, 1);
+                EstadoTarjetas.tarjetas.splice(pos, 1);
             }
             item.estado = Estado.INICIAL;
         }
-        if (tarjetas.length === 2) {
-            tarjetas.forEach((element) => {element.estado = Estado.ABIERTO;}, this);
+        if (EstadoTarjetas.tarjetas.length === 2) {
+            app.clickear = false;
+            EstadoTarjetas.tarjetas.forEach((element) => {element.estado = Estado.ABIERTO;}, this);
             setTimeout(function() {
-                const _estado = (tarjetas[0].imagen === tarjetas[1].imagen) ? Estado.SOLUCIONADO : Estado.INICIAL; 
-                tarjetas.forEach((element) => {element.estado = _estado;}, this);                
-                tarjetas.splice(0, 2);
+                const _estado = (EstadoTarjetas.tarjetas[0].imagen === EstadoTarjetas.tarjetas[1].imagen) ? Estado.SOLUCIONADO : Estado.INICIAL; 
+                EstadoTarjetas.tarjetas.forEach((element) => {element.estado = _estado;}, this);                
+                EstadoTarjetas.tarjetas.splice(0, 2);
                 app.setState({list: app.state.list});
+                const queda = app.state.list.find(i => i.estado !== Estado.SOLUCIONADO);
+                if (queda === undefined) {
+                    clearInterval(app.state.interval);
+                }
                 app.clickear = true;
             }, 1000);
-            app.clickear = false;
         }
     };
 }
+EstadoTarjetas.tarjetas = [];
 
 export default EstadoTarjetas;
 export {Estado, EstadoTarjetas}
