@@ -8,6 +8,7 @@ class EstadoTarjetas {
             EstadoTarjetas.tarjetas.splice(0, 2);
             app.setState({list: app.state.list});
             const queda = app.state.list.find(i => i.estado !== Estado.SOLUCIONADO);
+            console.log(queda);
             if (queda === undefined) {
                 clearInterval(app.state.interval);
             }
