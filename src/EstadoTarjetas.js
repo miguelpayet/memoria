@@ -3,27 +3,25 @@ const Estado = {INICIAL: 1, ABIERTO: 2, SOLUCIONADO: 3};
 class EstadoTarjetas {
     static abrirTarjeta(item, app) {
         if (EstadoTarjetas.tarjetas.length === 2) {
-            const _estado = (EstadoTarjetas.tarjetas[0].imagen === EstadoTarjetas.tarjetas[1].imagen) ? Estado.SOLUCIONADO : Estado.INICIAL; 
-            EstadoTarjetas.tarjetas.forEach((element) => {element.estado = _estado;}, this);                
-            EstadoTarjetas.tarjetas.splice(0, 2);
-            app.setState({list: app.state.list});
-            const queda = app.state.list.find(i => i.estado !== Estado.SOLUCIONADO);
-            console.log(queda);
-            if (queda === undefined) {
-                clearInterval(app.state.interval);
+            if (EstadoTarjetas.tarjetas.every((value) => {return value.estado !== Estado.SOLUCIONADO})) {
+                EstadoTarjetas.tarjetas.forEach((value) => {value.estado = Estado.INICIAL}, this);
+            }
+            EstadoTarjetas.tarjetas.splice(0, 2);        
+        }
+        const _pos = EstadoTarjetas.tarjetas.findIndex(i => item.id === i.id);
+        if (_pos === -1 && item.estado === Estado.INICIAL) {
+            item.estado = Estado.ABIERTO;
+            EstadoTarjetas.tarjetas.push(item);
+            if (EstadoTarjetas.tarjetas.length === 2) {
+                const _imagenes = new Set(EstadoTarjetas.tarjetas.map((value) => {return value.imagen}));
+                if (_imagenes.size === 1) {
+                    EstadoTarjetas.tarjetas.forEach((value) => {value.estado = Estado.SOLUCIONADO;}, this);                                    
+                }
             }
         }
-        const pos = EstadoTarjetas.tarjetas.findIndex((i) => item.id === i.id)
-        if (item.estado === Estado.INICIAL) {
-            if (pos === -1) {
-                item.estado = Estado.ABIERTO; //CLICK;
-                EstadoTarjetas.tarjetas.push(item);
-            }
-        } else if (item.estado === Estado.ABIERTO) { //CLICK) {
-             if ((pos !== -1)) {
-                EstadoTarjetas.tarjetas.splice(pos, 1);
-            }
-            item.estado = Estado.INICIAL;
+        const queda = app.state.list.find(i => i.estado !== Estado.SOLUCIONADO);
+        if (queda === undefined) {
+            clearInterval(app.state.interval);
         }
     };
 }
